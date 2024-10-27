@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shivansh_verma2/home_screen.dart';
 import 'package:shivansh_verma2/services/auth_services.dart';
 import 'package:shivansh_verma2/signup_sceen.dart';

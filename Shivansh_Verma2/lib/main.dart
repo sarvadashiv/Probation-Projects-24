@@ -1,12 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shivansh_verma2/home_screen.dart';
 import 'package:shivansh_verma2/login_screen.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shivansh_verma2/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shivansh_verma2/signup_sceen.dart';
 
 
 void main() async{

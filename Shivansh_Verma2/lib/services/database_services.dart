@@ -7,7 +7,7 @@ class DatabaseServices{
   final CollectionReference todoCollection = FirebaseFirestore.instance.collection("todos");
   User? user= FirebaseAuth.instance.currentUser;
   Future<DocumentReference> addToDoTask(
-      String title,String description, String) async {
+      String title,String description) async {
     return await todoCollection.add({
       'uid': user!.uid,
       'title': title,
