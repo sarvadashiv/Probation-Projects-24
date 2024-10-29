@@ -12,9 +12,10 @@ class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white38,
         foregroundColor: Colors.white,
         title: Text('Create Account'),
       ),
@@ -85,7 +86,7 @@ class SignupScreen extends StatelessWidget {
                   }
                 }, child: Text(
                     'Register',style: TextStyle(
-                      color: Colors.indigo,fontSize: 18)
+                      color: Colors.black,fontSize: 18)
                     )
                 )
               ),
@@ -96,7 +97,7 @@ class SignupScreen extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
               }, child: Text(
                   'Login',
-              style: TextStyle(fontSize: 18, color: Colors.white),))
+              style: TextStyle(fontSize: 18, color: Colors.white30),))
             ],
           ),
         )

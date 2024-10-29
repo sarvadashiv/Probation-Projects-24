@@ -38,11 +38,22 @@ class _CompletedWidgetState extends State<CompletedWidget> {
                   return Container(
                     margin: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        color: Colors.white54,
+                        color: Colors.white60,
                         borderRadius: BorderRadius.circular(10)
                     ),
                     child: Slidable(
                       key: ValueKey(toDo.id),
+                      startActionPane: ActionPane(
+                          motion: DrawerMotion(),
+                          children: [
+                          SlidableAction(
+                          backgroundColor: Colors.amber,
+                          foregroundColor: Colors.white,
+                          icon: Icons.edit,
+                          label: 'UnMark',
+                          onPressed: (context){
+                            _databaseServices.updateTodoStatus(toDo.id, false);
+                          })]),
                       endActionPane: ActionPane(motion: DrawerMotion(),
                           children: [
                             SlidableAction(
@@ -80,7 +91,7 @@ class _CompletedWidgetState extends State<CompletedWidget> {
                 });}
           else{
             return Center(
-                child: CircularProgressIndicator(color: Colors.white,)
+                child: CircularProgressIndicator(color: Colors.deepPurple)
             );
           }
         }

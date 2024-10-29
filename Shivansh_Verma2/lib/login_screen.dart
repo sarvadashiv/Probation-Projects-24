@@ -12,9 +12,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.black12,
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white38,
         foregroundColor: Colors.white,
         title: Text('Sign In'),
       ),
@@ -76,7 +77,7 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(
                     height: 55,
                     child: ElevatedButton(onPressed: ()async{
-                      User? user= await _auth.registerWithEmailAndPassword(
+                      User? user= await _auth.signInWithEmailAndPassword(
                           _emailController.text,
                           _passController.text
                       );
@@ -85,7 +86,7 @@ class LoginScreen extends StatelessWidget {
                       }
                     }, child: Text(
                         'Log In',style: TextStyle(
-                        color: Colors.indigo,fontSize: 18)
+                        color: Colors.black,fontSize: 18)
                     )
                     )
                 ),
@@ -96,7 +97,7 @@ class LoginScreen extends StatelessWidget {
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> SignupScreen()));
                 }, child: Text(
                   'Create Account',
-                  style: TextStyle(fontSize: 18, color: Colors.white),))
+                  style: TextStyle(fontSize: 18, color: Colors.white30),))
               ],
             ),
           )

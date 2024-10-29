@@ -22,10 +22,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.deepPurple,
+      backgroundColor: Colors.black26,
       appBar: AppBar(
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.orange,
+        foregroundColor: Colors.black,
         title: Text('ToDo'),
         actions: [
           IconButton(onPressed: ()async{
@@ -53,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 50,
                     width: MediaQuery.of(context).size.width/2.2,
                     decoration: BoxDecoration(
-                      color: _buttonIndex ==0 ? Colors.indigo: Colors.white,
+                      color: _buttonIndex ==0 ? Colors.orange[300] : Colors.white30,
                       borderRadius: BorderRadius.circular(10)
                     ),
                     child: Center(
@@ -62,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontSize: _buttonIndex == 0? 16:14,
                         fontWeight: FontWeight.w500,
                         color:
-                          _buttonIndex == 0 ? Colors.white : Colors.black38
+                          _buttonIndex == 0 ? Colors.black : Colors.black
                       ),),
                     ),
                   ),
@@ -78,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 50,
                     width: MediaQuery.of(context).size.width/2.2,
                     decoration: BoxDecoration(
-                        color: _buttonIndex == 1 ? Colors.indigo: Colors.white,
+                        color: _buttonIndex == 1 ? Colors.orange[300]: Colors.white30,
                         borderRadius: BorderRadius.circular(10)
                     ),
                     child: Center(
@@ -87,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             fontSize: _buttonIndex == 1? 16:14,
                             fontWeight: FontWeight.w500,
                             color:
-                            _buttonIndex == 1 ? Colors.white : Colors.black38
+                            _buttonIndex == 1 ? Colors.black : Colors.black
                         ),),
                     ),
                   ),
@@ -100,8 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.white,
-          child: Icon(Icons.add),
+          backgroundColor: Colors.white38,
+          child: Icon(Icons.add,color: Colors.orange),
           onPressed: (){
         _showTaskDialog(context);
       }),
