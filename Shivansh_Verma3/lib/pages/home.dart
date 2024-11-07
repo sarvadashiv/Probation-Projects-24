@@ -89,397 +89,401 @@ import '../service.dart';
                    child: Image.asset("images/bg1.jpg", fit: BoxFit.cover
                    )
                ),
-               Container(
-                 margin: EdgeInsets.only(top: 50.0, left: 10, right: 10),
-                 child: Column(
-                   children: [
-                     Container(
-                       height: 50,
-                       child: ListView(
-                         scrollDirection: Axis.horizontal,
-                         children: [
-                           Music?Container(
-                             margin: EdgeInsets.only(right: 20),
-                             child: Material(
-                               elevation:5.0,
-                               borderRadius: BorderRadius.circular(30),
+               SingleChildScrollView(
+                 child: Container(
+                   margin: EdgeInsets.only(top: 50.0, left: 10, right: 10),
+                   child: Column(
+                     children: [
+                       Container(
+                         height: 50,
+                         child: ListView(
+                           scrollDirection: Axis.horizontal,
+                           children: [
+                             Music?Container(
+                               margin: EdgeInsets.only(right: 20),
+                               child: Material(
+                                 elevation:5.0,
+                                 borderRadius: BorderRadius.circular(30),
+                                 child: Container(
+                                   width: 120,
+                                   decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                   child: Center(
+                                     child: Text(
+                                       'Music',
+                                       style: TextStyle(
+                                           color: Colors.white,
+                                           fontSize: 24,
+                                           fontWeight: FontWeight.bold
+                                       ),),
+                                   ),
+                                 ),
+                               ),
+                             ): GestureDetector(
+                               onTap: ()async{
+                                 Music= true;
+                                 Geography= false;
+                                 FoodDrink= false;
+                                 ScienceNature= false;
+                                 Entertainment=false;
+                                 answernow=false;
+                                 option.clear();
+                                 await RestOption();
+                                 await fetchQuiz('music');
+                                 setState(() {
+                 
+                                 });
+                               },
                                child: Container(
                                  width: 120,
-                                 decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                 margin: EdgeInsets.only( right: 20),
+                                 decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
                                  child: Center(
                                    child: Text(
-                                     'Music',
-                                     style: TextStyle(
-                                         color: Colors.white,
-                                         fontSize: 24,
-                                         fontWeight: FontWeight.bold
-                                     ),),
+                                       'Music',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold
+                                        ),),
                                  ),
                                ),
                              ),
-                           ): GestureDetector(
-                             onTap: ()async{
-                               Music= true;
-                               Geography= false;
-                               FoodDrink= false;
-                               ScienceNature= false;
-                               Entertainment=false;
-                               answernow=false;
-                               option.clear();
-                               await RestOption();
-                               await fetchQuiz('music');
-                               setState(() {
-
-                               });
-                             },
-                             child: Container(
-                               width: 120,
-                               margin: EdgeInsets.only( right: 20),
-                               decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(
-                                     'Music',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.bold
-                                      ),),
+                             Geography?Container(
+                               margin: EdgeInsets.only(right: 20),
+                               child: Material(
+                                 elevation:5.0,
+                                 borderRadius: BorderRadius.circular(30),
+                                 child: Container(
+                                   width: 170,
+                                   decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                   child: Center(
+                                     child: Text(
+                                       'Geography',
+                                       style: TextStyle(
+                                           color: Colors.white,
+                                           fontSize: 24,
+                                           fontWeight: FontWeight.bold
+                                       ),),
+                                   ),
+                                 ),
                                ),
-                             ),
-                           ),
-                           Geography?Container(
-                             margin: EdgeInsets.only(right: 20),
-                             child: Material(
-                               elevation:5.0,
-                               borderRadius: BorderRadius.circular(30),
+                             ): GestureDetector(
+                               onTap: ()async{
+                                 Music= false;
+                                 Geography= true;
+                                 FoodDrink= false;
+                                 ScienceNature= false;
+                                 Entertainment=false;
+                                 answernow=false;
+                                 option.clear();
+                                 await RestOption();
+                                 await fetchQuiz('geography');
+                                 setState(() {
+                 
+                                 });
+                               },
                                child: Container(
                                  width: 170,
-                                 decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                 margin: EdgeInsets.only( right: 20),
+                                 decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
                                  child: Center(
                                    child: Text(
                                      'Geography',
                                      style: TextStyle(
-                                         color: Colors.white,
+                                         color: Colors.black,
                                          fontSize: 24,
                                          fontWeight: FontWeight.bold
                                      ),),
                                  ),
                                ),
                              ),
-                           ): GestureDetector(
-                             onTap: ()async{
-                               Music= false;
-                               Geography= true;
-                               FoodDrink= false;
-                               ScienceNature= false;
-                               Entertainment=false;
-                               answernow=false;
-                               option.clear();
-                               await RestOption();
-                               await fetchQuiz('geography');
-                               setState(() {
-
-                               });
-                             },
-                             child: Container(
-                               width: 170,
-                               margin: EdgeInsets.only( right: 20),
-                               decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(
-                                   'Geography',
-                                   style: TextStyle(
-                                       color: Colors.black,
-                                       fontSize: 24,
-                                       fontWeight: FontWeight.bold
-                                   ),),
+                             FoodDrink?Container(
+                               margin: EdgeInsets.only(right: 20),
+                               child: Material(
+                                 elevation:5.0,
+                                 borderRadius: BorderRadius.circular(30),
+                                 child: Container(
+                                   width: 180,
+                                   decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                   child: Center(
+                                     child: Text(
+                                       'FoodDrink',
+                                       style: TextStyle(
+                                           color: Colors.white,
+                                           fontSize: 24,
+                                           fontWeight: FontWeight.bold
+                                       ),),
+                                   ),
+                                 ),
                                ),
-                             ),
-                           ),
-                           FoodDrink?Container(
-                             margin: EdgeInsets.only(right: 20),
-                             child: Material(
-                               elevation:5.0,
-                               borderRadius: BorderRadius.circular(30),
+                             ): GestureDetector(
+                               onTap: ()async{
+                                 Music= false;
+                                 Geography= false;
+                                 FoodDrink= true;
+                                 ScienceNature= false;
+                                 Entertainment=false;
+                                 answernow=false;
+                                 option.clear();
+                                 await RestOption();
+                                 await fetchQuiz('fooddrink');
+                                 setState(() {
+                 
+                                 });
+                               },
                                child: Container(
                                  width: 180,
-                                 decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                 margin: EdgeInsets.only( right: 20),
+                                 decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
                                  child: Center(
                                    child: Text(
                                      'FoodDrink',
                                      style: TextStyle(
-                                         color: Colors.white,
+                                         color: Colors.black,
                                          fontSize: 24,
                                          fontWeight: FontWeight.bold
                                      ),),
                                  ),
                                ),
                              ),
-                           ): GestureDetector(
-                             onTap: ()async{
-                               Music= false;
-                               Geography= false;
-                               FoodDrink= true;
-                               ScienceNature= false;
-                               Entertainment=false;
-                               answernow=false;
-                               option.clear();
-                               await RestOption();
-                               await fetchQuiz('fooddrink');
-                               setState(() {
-
-                               });
-                             },
-                             child: Container(
-                               width: 180,
-                               margin: EdgeInsets.only( right: 20),
-                               decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(
-                                   'FoodDrink',
-                                   style: TextStyle(
-                                       color: Colors.black,
-                                       fontSize: 24,
-                                       fontWeight: FontWeight.bold
-                                   ),),
+                             ScienceNature?Container(
+                               margin: EdgeInsets.only(right: 20),
+                               child: Material(
+                                 elevation:5.0,
+                                 borderRadius: BorderRadius.circular(30),
+                                 child: Container(
+                                   width: 210,
+                                   decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                   child: Center(
+                                     child: Text(
+                                       'ScienceNature',
+                                       style: TextStyle(
+                                           color: Colors.white,
+                                           fontSize: 24,
+                                           fontWeight: FontWeight.bold
+                                       ),),
+                                   ),
+                                 ),
                                ),
-                             ),
-                           ),
-                           ScienceNature?Container(
-                             margin: EdgeInsets.only(right: 20),
-                             child: Material(
-                               elevation:5.0,
-                               borderRadius: BorderRadius.circular(30),
+                             ): GestureDetector(
+                               onTap: ()async{
+                                 Music= false;
+                                 Geography= false;
+                                 FoodDrink= false;
+                                 ScienceNature= true;
+                                 Entertainment=false;
+                                 answernow=false;
+                                 option.clear();
+                 
+                                 await RestOption();
+                                 await fetchQuiz('sciencenature');
+                                 setState(() {
+                 
+                                 });
+                               },
                                child: Container(
                                  width: 210,
-                                 decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                 margin: EdgeInsets.only( right: 20),
+                                 decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
                                  child: Center(
                                    child: Text(
                                      'ScienceNature',
                                      style: TextStyle(
-                                         color: Colors.white,
+                                         color: Colors.black,
                                          fontSize: 24,
                                          fontWeight: FontWeight.bold
                                      ),),
                                  ),
                                ),
                              ),
-                           ): GestureDetector(
-                             onTap: ()async{
-                               Music= false;
-                               Geography= false;
-                               FoodDrink= false;
-                               ScienceNature= true;
-                               Entertainment=false;
-                               answernow=false;
-                               option.clear();
-
-                               await RestOption();
-                               await fetchQuiz('sciencenature');
-                               setState(() {
-
-                               });
-                             },
-                             child: Container(
-                               width: 210,
-                               margin: EdgeInsets.only( right: 20),
-                               decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(
-                                   'ScienceNature',
-                                   style: TextStyle(
-                                       color: Colors.black,
-                                       fontSize: 24,
-                                       fontWeight: FontWeight.bold
-                                   ),),
+                             Entertainment?Container(
+                               margin: EdgeInsets.only(right: 20),
+                               child: Material(
+                                 elevation:5.0,
+                                 borderRadius: BorderRadius.circular(30),
+                                 child: Container(
+                                   width: 210,
+                                   decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                   child: Center(
+                                     child: Text(
+                                       'Entertainment',
+                                       style: TextStyle(
+                                           color: Colors.white,
+                                           fontSize: 24,
+                                           fontWeight: FontWeight.bold
+                                       ),),
+                                   ),
+                                 ),
                                ),
-                             ),
-                           ),
-                           Entertainment?Container(
-                             margin: EdgeInsets.only(right: 20),
-                             child: Material(
-                               elevation:5.0,
-                               borderRadius: BorderRadius.circular(30),
+                             ): GestureDetector(
+                               onTap: ()async{
+                                 Music= false;
+                                 Geography= false;
+                                 FoodDrink= false;
+                                 ScienceNature= false;
+                                 Entertainment= true;
+                                 answernow=false;
+                                 option.clear();
+                                 await RestOption();
+                                 await fetchQuiz('entertainment');
+                                 setState(() {
+                 
+                                 });
+                               },
                                child: Container(
                                  width: 210,
-                                 decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(30)),
+                                 margin: EdgeInsets.only( right: 20),
+                                 decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
                                  child: Center(
                                    child: Text(
                                      'Entertainment',
+                                     style: TextStyle(
+                                         color: Colors.black,
+                                         fontSize: 24,
+                                         fontWeight: FontWeight.bold
+                                     ),),
+                                 ),
+                               ),
+                             ),
+                           ],
+                         ),
+                       ),
+                       SizedBox(height: 40,),
+                       option.length!=4? Center(child: CircularProgressIndicator()):
+                 
+                       Container(
+                               width: MediaQuery.of(context).size.width,
+                               margin: EdgeInsets.only(right: 10, left: 10),
+                               decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(20)),
+                               child: Column(children: [
+                                 SizedBox(height: 30),
+                                 Container(
+                                   width: MediaQuery.of(context).size.width/1.3,
+                                   child: Text(
+                                     question!,
+                                     textAlign: TextAlign.center,
                                      style: TextStyle(
                                          color: Colors.white,
                                          fontSize: 24,
                                          fontWeight: FontWeight.bold
                                      ),),
                                  ),
-                               ),
+                                 SizedBox(height: 40,),
+                                 GestureDetector(
+                                   onTap: (){
+                                     answernow=true;
+                                     setState(() {
+                 
+                                     });
+                                   },
+                                   child: Container(
+                                     padding: EdgeInsets.all(12),
+                                     margin: EdgeInsets.only(right: 20, left: 20),
+                                     width: MediaQuery.of(context).size.width,
+                                     decoration: BoxDecoration(border: Border.all(
+                                         color:answernow?answer==option[0].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
+                                     child: Center(
+                                       child: Text(option[0].replaceAll(RegExp(r'[\[\]]'), ''),
+                                         textAlign: TextAlign.center,
+                                         style: TextStyle(
+                                             color: Colors.white,
+                                             fontSize: 24,
+                                             fontWeight: FontWeight.w500
+                                         ),),
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 20,),
+                                 GestureDetector(
+                                   onTap: (){
+                                     answernow=true;
+                                     setState(() {
+                 
+                                     });
+                                   },
+                                   child: Container(
+                                     padding: EdgeInsets.all(12),
+                                     margin: EdgeInsets.only(right: 20, left: 20),
+                                     width: MediaQuery.of(context).size.width,
+                                     decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[1].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
+                                     child: Center(
+                                       child: Text(
+                                         option[1].replaceAll(RegExp(r'[\[\]]'), ''),
+                                         textAlign: TextAlign.center,
+                 
+                                         style: TextStyle(
+                                             color: Colors.white,
+                                             fontSize: 24,
+                                             fontWeight: FontWeight.w500
+                                         ),),
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 20,),
+                                 GestureDetector(
+                                   onTap: (){
+                                     answernow=true;
+                                     setState(() {
+                 
+                                     });
+                                   },
+                                   child: Container(
+                                     padding: EdgeInsets.all(12),
+                                     margin: EdgeInsets.only(right: 20, left: 20),
+                                     width: MediaQuery.of(context).size.width,
+                                     decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[2].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
+                                     child: Center(
+                                       child: Text(
+                                         option[2].replaceAll(RegExp(r'[\[\]]'), ''),
+                                         textAlign: TextAlign.center,
+                                         style: TextStyle(
+                                             color: Colors.white,
+                                             fontSize: 24,
+                                             fontWeight: FontWeight.w500
+                                         ),),
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 20,),
+                                 GestureDetector(
+                                   onTap: (){
+                                     answernow=true;
+                                     setState(() {
+                 
+                                     });
+                                   },
+                                   child: Container(
+                                     padding: EdgeInsets.all(12),
+                                     margin: EdgeInsets.only(right: 20, left: 20),
+                                     width: MediaQuery.of(context).size.width,
+                                     decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[3].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
+                                     child: Center(
+                                       child: Text(
+                                         option[3].replaceAll(RegExp(r'[\[\]]'), ''),
+                                         textAlign: TextAlign.center,
+                                         style: TextStyle(
+                                             color: Colors.white,
+                                             fontSize: 24,
+                                             fontWeight: FontWeight.w500
+                                         ),),
+                                     ),
+                                   ),
+                                 ),
+                                 SizedBox(height: 40,)
+                               ],),
                              ),
-                           ): GestureDetector(
-                             onTap: ()async{
-                               Music= false;
-                               Geography= false;
-                               FoodDrink= false;
-                               ScienceNature= false;
-                               Entertainment= true;
-                               answernow=false;
-                               option.clear();
-                               await RestOption();
-                               await fetchQuiz('entertainment');
-                               setState(() {
+                       SizedBox(height: 20),
+                       ElevatedButton(
 
-                               });
-                             },
-                             child: Container(
-                               width: 210,
-                               margin: EdgeInsets.only( right: 20),
-                               decoration: BoxDecoration(color: Colors.white54, borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(
-                                   'Entertainment',
-                                   style: TextStyle(
-                                       color: Colors.black,
-                                       fontSize: 24,
-                                       fontWeight: FontWeight.bold
-                                   ),),
-                               ),
-                             ),
-                           ),
-                         ],
+                         style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Colors.black)),
+                         onPressed: refreshQuiz,
+
+                         child: Text('New Question',
+                         style: TextStyle(color: Colors.white, fontSize: 16),
+                         ),
                        ),
-                     ),
-                     SizedBox(height: 40,),
-                     option.length!=4? Center(child: CircularProgressIndicator()): SingleChildScrollView(
-                       child: Container(
-                         width: MediaQuery.of(context).size.width,
-                         margin: EdgeInsets.only(right: 10, left: 10),
-                         decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(20)),
-                         child: Column(children: [
-                           SizedBox(height: 40),
-                           Container(
-                             width: MediaQuery.of(context).size.width/1.3,
-                             child: Text(
-                               question!,
-                               textAlign: TextAlign.center,
-                               style: TextStyle(
-                                   color: Colors.white,
-                                   fontSize: 24,
-                                   fontWeight: FontWeight.bold
-                               ),),
-                           ),
-                           SizedBox(height: 40,),
-                           GestureDetector(
-                             onTap: (){
-                               answernow=true;
-                               setState(() {
-                       
-                               });
-                             },
-                             child: Container(
-                               padding: EdgeInsets.all(12),
-                               margin: EdgeInsets.only(right: 20, left: 20),
-                               width: MediaQuery.of(context).size.width,
-                               decoration: BoxDecoration(border: Border.all(
-                                   color:answernow?answer==option[0].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(option[0].replaceAll(RegExp(r'[\[\]]'), ''),
-                                   textAlign: TextAlign.center,
-                                   style: TextStyle(
-                                       color: Colors.white,
-                                       fontSize: 24,
-                                       fontWeight: FontWeight.w500
-                                   ),),
-                               ),
-                             ),
-                           ),
-                           SizedBox(height: 20,),
-                           GestureDetector(
-                             onTap: (){
-                               answernow=true;
-                               setState(() {
-                       
-                               });
-                             },
-                             child: Container(
-                               padding: EdgeInsets.all(12),
-                               margin: EdgeInsets.only(right: 20, left: 20),
-                               width: MediaQuery.of(context).size.width,
-                               decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[1].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(
-                                   option[1].replaceAll(RegExp(r'[\[\]]'), ''),
-                                   textAlign: TextAlign.center,
-                       
-                                   style: TextStyle(
-                                       color: Colors.white,
-                                       fontSize: 24,
-                                       fontWeight: FontWeight.w500
-                                   ),),
-                               ),
-                             ),
-                           ),
-                           SizedBox(height: 20,),
-                           GestureDetector(
-                             onTap: (){
-                               answernow=true;
-                               setState(() {
-                       
-                               });
-                             },
-                             child: Container(
-                               padding: EdgeInsets.all(12),
-                               margin: EdgeInsets.only(right: 20, left: 20),
-                               width: MediaQuery.of(context).size.width,
-                               decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[2].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(
-                                   option[2].replaceAll(RegExp(r'[\[\]]'), ''),
-                                   textAlign: TextAlign.center,
-                                   style: TextStyle(
-                                       color: Colors.white,
-                                       fontSize: 24,
-                                       fontWeight: FontWeight.w500
-                                   ),),
-                               ),
-                             ),
-                           ),
-                           SizedBox(height: 20,),
-                           GestureDetector(
-                             onTap: (){
-                               answernow=true;
-                               setState(() {
-                       
-                               });
-                             },
-                             child: Container(
-                               padding: EdgeInsets.all(12),
-                               margin: EdgeInsets.only(right: 20, left: 20),
-                               width: MediaQuery.of(context).size.width,
-                               decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[3].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
-                               child: Center(
-                                 child: Text(
-                                   option[3].replaceAll(RegExp(r'[\[\]]'), ''),
-                                   textAlign: TextAlign.center,
-                                   style: TextStyle(
-                                       color: Colors.white,
-                                       fontSize: 24,
-                                       fontWeight: FontWeight.w500
-                                   ),),
-                               ),
-                             ),
-                           ),
-                           SizedBox(height: 40,)
-                         ],),
-                       ),
-                     ),
-                     SizedBox(height: 20),
-                     ElevatedButton(
-                       style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Colors.black)),
-                       onPressed: refreshQuiz,
-                       child: Text('New Question',
-                       style: TextStyle(color: Colors.white),
-                       ),
-                     ),
-                   ],
+                     ],
+                   ),
                  ),
                )
              ],
