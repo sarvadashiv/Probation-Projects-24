@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'home.dart';
+
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
 
@@ -24,15 +26,21 @@ class _OnboardingState extends State<Onboarding> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Center(
-                  child: Container(
-                    margin: EdgeInsets.only(bottom: 120),
-                    height: 50,
-                    width: MediaQuery.of(context).size.width/2.9,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),color: Colors.black
+                  
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 120),
+                      height: 50,
+                      width: MediaQuery.of(context).size.width/2.9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),color: Colors.black
+                      ),
+                        child: Center(child: Text('Start', style: TextStyle(color: Color.fromARGB(
+                            255, 243, 226, 184), fontSize: 30, fontWeight: FontWeight.bold)))
                     ),
-                      child: Center(child: Text('Start', style: TextStyle(color: Color.fromARGB(
-                          255, 243, 226, 184), fontSize: 30, fontWeight: FontWeight.bold)))
                   ),
                 ),
               ],

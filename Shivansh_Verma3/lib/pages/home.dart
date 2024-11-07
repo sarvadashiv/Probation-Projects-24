@@ -125,7 +125,7 @@ import '../service.dart';
                                ScienceNature= false;
                                Entertainment=false;
                                answernow=false;
-                               option=[];
+                               option.clear();
                                await RestOption();
                                await fetchQuiz('music');
                                setState(() {
@@ -174,7 +174,7 @@ import '../service.dart';
                                ScienceNature= false;
                                Entertainment=false;
                                answernow=false;
-                               option=[];
+                               option.clear();
                                await RestOption();
                                await fetchQuiz('geography');
                                setState(() {
@@ -223,7 +223,7 @@ import '../service.dart';
                                ScienceNature= false;
                                Entertainment=false;
                                answernow=false;
-                               option=[];
+                               option.clear();
                                await RestOption();
                                await fetchQuiz('fooddrink');
                                setState(() {
@@ -272,7 +272,7 @@ import '../service.dart';
                                ScienceNature= true;
                                Entertainment=false;
                                answernow=false;
-                               option=[];
+                               option.clear();
 
                                await RestOption();
                                await fetchQuiz('sciencenature');
@@ -322,7 +322,7 @@ import '../service.dart';
                                ScienceNature= false;
                                Entertainment= true;
                                answernow=false;
-                               option=[];
+                               option.clear();
                                await RestOption();
                                await fetchQuiz('entertainment');
                                setState(() {
@@ -348,126 +348,128 @@ import '../service.dart';
                        ),
                      ),
                      SizedBox(height: 40,),
-                     option.length!=4? Center(child: CircularProgressIndicator()): Container(
-                       width: MediaQuery.of(context).size.width,
-                       margin: EdgeInsets.only(right: 10, left: 10),
-                       decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(20)),
-                       child: Column(children: [
-                         SizedBox(height: 40),
-                         Container(
-                           width: MediaQuery.of(context).size.width/1.3,
-                           child: Text(
-                             question!,
-                             textAlign: TextAlign.center,
-                             style: TextStyle(
-                                 color: Colors.white,
-                                 fontSize: 24,
-                                 fontWeight: FontWeight.bold
-                             ),),
-                         ),
-                         SizedBox(height: 40,),
-                         GestureDetector(
-                           onTap: (){
-                             answernow=true;
-                             setState(() {
-
-                             });
-                           },
-                           child: Container(
-                             padding: EdgeInsets.all(12),
-                             margin: EdgeInsets.only(right: 20, left: 20),
-                             width: MediaQuery.of(context).size.width,
-                             decoration: BoxDecoration(border: Border.all(
-                                 color:answernow?answer==option[0].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
-                             child: Center(
-                               child: Text(option[0].replaceAll(RegExp(r'[\[\]]'), ''),
-                                 textAlign: TextAlign.center,
-                                 style: TextStyle(
-                                     color: Colors.white,
-                                     fontSize: 24,
-                                     fontWeight: FontWeight.w500
-                                 ),),
+                     option.length!=4? Center(child: CircularProgressIndicator()): SingleChildScrollView(
+                       child: Container(
+                         width: MediaQuery.of(context).size.width,
+                         margin: EdgeInsets.only(right: 10, left: 10),
+                         decoration: BoxDecoration(color: Colors.black, borderRadius: BorderRadius.circular(20)),
+                         child: Column(children: [
+                           SizedBox(height: 40),
+                           Container(
+                             width: MediaQuery.of(context).size.width/1.3,
+                             child: Text(
+                               question!,
+                               textAlign: TextAlign.center,
+                               style: TextStyle(
+                                   color: Colors.white,
+                                   fontSize: 24,
+                                   fontWeight: FontWeight.bold
+                               ),),
+                           ),
+                           SizedBox(height: 40,),
+                           GestureDetector(
+                             onTap: (){
+                               answernow=true;
+                               setState(() {
+                       
+                               });
+                             },
+                             child: Container(
+                               padding: EdgeInsets.all(12),
+                               margin: EdgeInsets.only(right: 20, left: 20),
+                               width: MediaQuery.of(context).size.width,
+                               decoration: BoxDecoration(border: Border.all(
+                                   color:answernow?answer==option[0].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
+                               child: Center(
+                                 child: Text(option[0].replaceAll(RegExp(r'[\[\]]'), ''),
+                                   textAlign: TextAlign.center,
+                                   style: TextStyle(
+                                       color: Colors.white,
+                                       fontSize: 24,
+                                       fontWeight: FontWeight.w500
+                                   ),),
+                               ),
                              ),
                            ),
-                         ),
-                         SizedBox(height: 20,),
-                         GestureDetector(
-                           onTap: (){
-                             answernow=true;
-                             setState(() {
-
-                             });
-                           },
-                           child: Container(
-                             padding: EdgeInsets.all(12),
-                             margin: EdgeInsets.only(right: 20, left: 20),
-                             width: MediaQuery.of(context).size.width,
-                             decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[1].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
-                             child: Center(
-                               child: Text(
-                                 option[1].replaceAll(RegExp(r'[\[\]]'), ''),
-                                 textAlign: TextAlign.center,
-
-                                 style: TextStyle(
-                                     color: Colors.white,
-                                     fontSize: 24,
-                                     fontWeight: FontWeight.w500
-                                 ),),
+                           SizedBox(height: 20,),
+                           GestureDetector(
+                             onTap: (){
+                               answernow=true;
+                               setState(() {
+                       
+                               });
+                             },
+                             child: Container(
+                               padding: EdgeInsets.all(12),
+                               margin: EdgeInsets.only(right: 20, left: 20),
+                               width: MediaQuery.of(context).size.width,
+                               decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[1].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
+                               child: Center(
+                                 child: Text(
+                                   option[1].replaceAll(RegExp(r'[\[\]]'), ''),
+                                   textAlign: TextAlign.center,
+                       
+                                   style: TextStyle(
+                                       color: Colors.white,
+                                       fontSize: 24,
+                                       fontWeight: FontWeight.w500
+                                   ),),
+                               ),
                              ),
                            ),
-                         ),
-                         SizedBox(height: 20,),
-                         GestureDetector(
-                           onTap: (){
-                             answernow=true;
-                             setState(() {
-
-                             });
-                           },
-                           child: Container(
-                             padding: EdgeInsets.all(12),
-                             margin: EdgeInsets.only(right: 20, left: 20),
-                             width: MediaQuery.of(context).size.width,
-                             decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[2].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
-                             child: Center(
-                               child: Text(
-                                 option[2].replaceAll(RegExp(r'[\[\]]'), ''),
-                                 textAlign: TextAlign.center,
-                                 style: TextStyle(
-                                     color: Colors.white,
-                                     fontSize: 24,
-                                     fontWeight: FontWeight.w500
-                                 ),),
+                           SizedBox(height: 20,),
+                           GestureDetector(
+                             onTap: (){
+                               answernow=true;
+                               setState(() {
+                       
+                               });
+                             },
+                             child: Container(
+                               padding: EdgeInsets.all(12),
+                               margin: EdgeInsets.only(right: 20, left: 20),
+                               width: MediaQuery.of(context).size.width,
+                               decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[2].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
+                               child: Center(
+                                 child: Text(
+                                   option[2].replaceAll(RegExp(r'[\[\]]'), ''),
+                                   textAlign: TextAlign.center,
+                                   style: TextStyle(
+                                       color: Colors.white,
+                                       fontSize: 24,
+                                       fontWeight: FontWeight.w500
+                                   ),),
+                               ),
                              ),
                            ),
-                         ),
-                         SizedBox(height: 20,),
-                         GestureDetector(
-                           onTap: (){
-                             answernow=true;
-                             setState(() {
-
-                             });
-                           },
-                           child: Container(
-                             padding: EdgeInsets.all(12),
-                             margin: EdgeInsets.only(right: 20, left: 20),
-                             width: MediaQuery.of(context).size.width,
-                             decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[3].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
-                             child: Center(
-                               child: Text(
-                                 option[3].replaceAll(RegExp(r'[\[\]]'), ''),
-                                 textAlign: TextAlign.center,
-                                 style: TextStyle(
-                                     color: Colors.white,
-                                     fontSize: 24,
-                                     fontWeight: FontWeight.w500
-                                 ),),
+                           SizedBox(height: 20,),
+                           GestureDetector(
+                             onTap: (){
+                               answernow=true;
+                               setState(() {
+                       
+                               });
+                             },
+                             child: Container(
+                               padding: EdgeInsets.all(12),
+                               margin: EdgeInsets.only(right: 20, left: 20),
+                               width: MediaQuery.of(context).size.width,
+                               decoration: BoxDecoration(border: Border.all(color:answernow?answer==option[3].replaceAll(RegExp(r'[\[\]]'), '')? Colors.green: Colors.red: Colors.white38, width: 2), borderRadius: BorderRadius.circular(30)),
+                               child: Center(
+                                 child: Text(
+                                   option[3].replaceAll(RegExp(r'[\[\]]'), ''),
+                                   textAlign: TextAlign.center,
+                                   style: TextStyle(
+                                       color: Colors.white,
+                                       fontSize: 24,
+                                       fontWeight: FontWeight.w500
+                                   ),),
+                               ),
                              ),
                            ),
-                         ),
-                         SizedBox(height: 40,)
-                       ],),
+                           SizedBox(height: 40,)
+                         ],),
+                       ),
                      ),
                      SizedBox(height: 20),
                      ElevatedButton(
