@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shivansh_verma4/utils/constants.dart';
 import '../utils/globals.dart';
@@ -76,6 +77,7 @@ Widget buildMobileHeader()=> SafeArea(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          HeaderLogo(),
           GestureDetector(
             onTap: ()=>Globals.scaffoldKey.currentState!.openDrawer,
             child: const Icon(
@@ -89,3 +91,28 @@ Widget buildMobileHeader()=> SafeArea(
       ),
     )
 );
+class HeaderLogo extends StatelessWidget {
+  HeaderLogo({super.key});
+  final style = GoogleFonts.oswald(
+    color: Colors.white,
+    fontSize: 36,
+    fontWeight: FontWeight.bold
+  );
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.only(left: 30,right: 10),
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: name.characters.first, style: style
+              ),
+              TextSpan(
+                  text: '.', style: style
+              )
+            ]
+    )),
+    );
+  }
+}
