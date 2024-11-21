@@ -1,4 +1,6 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shivansh_verma4/utils/constants.dart';
 
@@ -11,6 +13,9 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  List<MaterialColor> colorizeColors=[
+    Colors.brown,Colors.purple,Colors.amber,Colors.cyan
+  ];
   @override
   Widget build(BuildContext context) =>ScreenHelper(
       desktop: _buildUi(desktopMaxWidth),
@@ -57,10 +62,75 @@ class _WelcomePageState extends State<WelcomePage> {
                                   height: 60,
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      const Text(
+                                        'I\'m',
+                                        style: TextStyle(
+                                          fontFamily: 'Horizon',
+                                          fontSize: 40,
+                                          color: Colors.white
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      DefaultTextStyle(
+                                          style: const TextStyle(
+                                              fontFamily: 'Horizon',
+                                              fontSize: 40,
+                                              color: Colors.white
+                                          ),
+                                          child: AnimatedTextKit(
+                                              repeatForever: true,
+                                              animatedTexts: [
+                                                RotateAnimatedText('Passionate'),
+                                                RotateAnimatedText('HardWorking'),
+                                                RotateAnimatedText('Flutter Dev')
+                                              ]
+                                          )
+                                      )
+                                    ],
                                   )
                               ),
+                              const SizedBox(height: 16),
+                              const Padding(
+                                  padding: EdgeInsets.only(left: 16, right: 16),
+                                  child: Text(
+                                    miniDescription,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white70
+                                    ),
+                                  ),
+                              ),
+                              const SizedBox(height: 20),
+                              ElevatedButton(
+                                  onPressed: (){},
+                                  style: ElevatedButton.styleFrom(
+                                    side: const BorderSide(
+                                      width: 3,
+                                      color: Colors.white
+                                    ),
+                                    backgroundColor: Colors.transparent,
+                                    padding: const EdgeInsets.all(20)
+                                  ),
+                                  child: AnimatedTextKit(
+                                      animatedTexts: [
+                                        ColorizeAnimatedText(
+                                            "Download CV",
+                                            textStyle: TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold
+                                            ),
+                                            colors: colorizeColors)])
+
+                              )
                             ],
                           ),
+                      ),
+                      SizedBox(width: 40),
+                      Expanded(
+                          flex: ScreenHelper.isMobile(context)?0:3,
+                          child: Lottie.asset('assets/animation/yoga.json'),
                       )
                     ],
                   )
