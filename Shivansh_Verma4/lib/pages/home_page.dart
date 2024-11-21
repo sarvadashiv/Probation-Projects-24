@@ -19,11 +19,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<Widget> pages= [
-    // WelcomePage(),
-    // AboutPage(),
-    //ProjectsPage(),
-    //EducationPage(),
-    //SkillPage(),
+    WelcomePage(),
+    AboutPage(),
+    ProjectsPage(),
+    EducationPage(),
+    SkillPage(),
     FooterPage()
   ];
   final itemScrollController=ItemScrollController();

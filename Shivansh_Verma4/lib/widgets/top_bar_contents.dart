@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -57,15 +58,15 @@ class DesktopTabBar extends StatelessWidget {
           const SizedBox(width: 24,),
           menuItem(toPage: 0, title: 'Home'),
           const SizedBox(width: 24,),
-          menuItem(toPage: 0, title: 'About'),
+          menuItem(toPage: 1, title: 'About'),
           const SizedBox(width: 24,),
-          menuItem(toPage: 0, title: 'My Projects'),
+          menuItem(toPage: 2, title: 'My Projects'),
           const SizedBox(width: 24,),
-          menuItem(toPage: 0, title: 'Education'),
+          menuItem(toPage: 3, title: 'Education'),
           const SizedBox(width: 24,),
-          menuItem(toPage: 0, title: 'My Skills'),
+          menuItem(toPage: 4, title: 'My Skills'),
           const SizedBox(width: 24,),
-          menuItem(toPage: 0, title: 'Contact me'),
+          menuItem(toPage: 5, title: 'Contact me'),
         ],
       ),),
     );
@@ -79,7 +80,7 @@ Widget buildMobileHeader()=> SafeArea(
         children: [
           HeaderLogo(),
           GestureDetector(
-            onTap: ()=>Globals.scaffoldKey.currentState!.openDrawer,
+            onTap: ()=>Globals.scaffoldKey.currentState!.openEndDrawer(),
             child: const Icon(
               Icons.menu,
               color: Colors.white,
