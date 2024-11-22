@@ -65,7 +65,7 @@ class FooterPage extends StatelessWidget {
                                     )
                                   ),
                                   TextSpan(
-                                    text: '${footerItem.text1}\n',
+                                    text: '${footerItem.text2}\n',
                                       style: const TextStyle(
                                           color: captionColor
                                       )

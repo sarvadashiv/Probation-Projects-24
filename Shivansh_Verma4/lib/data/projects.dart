@@ -3,7 +3,7 @@ import 'package:shivansh_verma4/models/project.dart';
 const List<Project> projects = [
   Project(
     description: 'To-Do App',
-    image: 'assets/todo.jpg',
+    image: 'assets/to-do.jpg',
     gitLink: 'https://github.com/sarvadashiv',
   ),
   Project(

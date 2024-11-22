@@ -102,7 +102,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                     ),
                                   ),
                               ),
-                              const SizedBox(height: 20),
+                              const SizedBox(height: 30),
                               ElevatedButton(
                                   onPressed: (){},
                                   style: ElevatedButton.styleFrom(
@@ -114,6 +114,7 @@ class _WelcomePageState extends State<WelcomePage> {
                                     padding: const EdgeInsets.all(20)
                                   ),
                                   child: AnimatedTextKit(
+                                    repeatForever: true,
                                       animatedTexts: [
                                         ColorizeAnimatedText(
                                             "Download CV",
@@ -127,11 +128,12 @@ class _WelcomePageState extends State<WelcomePage> {
                             ],
                           ),
                       ),
-                      SizedBox(width: 40),
+                      SizedBox(width: 30),
                       Expanded(
                           flex: ScreenHelper.isMobile(context)?0:3,
-                          child: Lottie.asset('assets/animation/yoga.json'),
-                      )
+                          child: Lottie.asset('assets/animation/yoga.json', width: 300),
+                      ),
+                      SizedBox(height: 40,)
                     ],
                   )
               );

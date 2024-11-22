@@ -24,16 +24,18 @@ Widget _buildUi(double width, BuildContext context)=> SizedBox(
     child: LayoutBuilder(
 
         builder: (context, constraints){
-          final style= GoogleFonts.oswald(color: Colors.white, fontSize: 24, height: 1.3);
+          final style= GoogleFonts.oswald(color: Colors.white, fontSize: 20, height: 1.3);
           return Expanded(
               child: ResponsiveWrapper(
                   maxWidth: width,
                   minWidth: width,
                 child: Flex(direction: ScreenHelper.isMobile(context)? Axis.vertical: Axis.horizontal,
                   children: [
+
                     Expanded(
+
                         flex: ScreenHelper.isMobile(context)? 0:3,
-                child: Lottie.asset('assets/animation/coder.json',width: 500)
+                child: Lottie.asset('assets/animation/coder.json',width: 300)
 
                     ),
                     const SizedBox(width: 40),
@@ -42,7 +44,7 @@ Widget _buildUi(double width, BuildContext context)=> SizedBox(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(aboutFirst,style: style),
+                          Text(aboutFirst,style: style,),
                           Text(aboutSecond, style: style),
                           const SizedBox(height: 5)
                         ],

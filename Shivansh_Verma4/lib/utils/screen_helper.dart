@@ -23,7 +23,7 @@ class ScreenHelper extends StatelessWidget {
       MediaQuery.of(context).size.width >= 1200;
 
   static double mobileMaxWidth(BuildContext context) =>
-      MediaQuery.of(context).size.width * .8;
+      MediaQuery.of(context).size.width * .9;
 
   static double deviceMaxHeight(BuildContext context) =>
       MediaQuery.of(context).size.height;
