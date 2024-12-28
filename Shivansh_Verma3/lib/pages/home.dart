@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import '../service.dart';
  class Home extends StatefulWidget {
    const Home({super.key});
  
@@ -13,6 +12,7 @@ import '../service.dart';
  }
  
  class _HomeState extends State<Home> {
+   String APIKEY="XW4taz6kGq6aWIR+nvMjrg==PXOpbcpUqyLmBmXl";
    bool Music= true, Geography= false, FoodDrink= false, ScienceNature= false,Entertainment= false, answernow=false;
    String? question, answer;
    List<String> option=[];
@@ -42,28 +42,31 @@ import '../service.dart';
      }
    }
    Future<void> RestOption() async{
-     final response = await http.get(Uri.parse('https://api.api-ninjas.com/v1/randomword'),
-         headers:{
-           "Content-Type": "application/json",
-           "X-Api-Key": APIKEY
-         }
-     );
-     if(response.statusCode==200){
-       Map<String, dynamic> jsonData= jsonDecode(response.body);
-       if(jsonData.isNotEmpty){
-         String word= jsonData["word"].toString();
 
-         option.add(word);
+       final response = await http.get(
+           Uri.parse('https://api.api-ninjas.com/v1/randomword'),
+           headers: {
+             "Content-Type": "application/json",
+             "X-Api-Key": APIKEY
+           }
+       );
+       if (response.statusCode == 200) {
+         Map<String, dynamic> jsonData = jsonDecode(response.body);
+         if (jsonData.isNotEmpty) {
+           String word = jsonData["word"].toString();
+
+           option.add(word);
+         }
+         if (option.length < 3) {
+           RestOption();
+         }
+         else {
+           option.add(answer!);
+           shuffleList();
+         }
+         setState(() {});
        }
-       if(option.length<3){
-         RestOption();
-       }
-       else{
-         option.add(answer!);
-         shuffleList();
-       }
-       setState(() {});
-     }
+
    }
    void shuffleList(){
      option= List.from(option)..shuffle(Random());
@@ -74,7 +77,7 @@ import '../service.dart';
    Future<void> refreshQuiz() async {
      answernow = false;
      option.clear();
-     await fetchQuiz(Music ? 'music' : Geography ? 'geography' : FoodDrink ? 'fooddrink' : ScienceNature ? 'sciencenature' : 'entertainment');
+     await fetchQuiz(Music ? 'music' : Geography ? 'geography' : FoodDrink ? 'fooddrink' : ScienceNature ? 'sciencenature' :'entertainment');
      await RestOption();
    }
    @override

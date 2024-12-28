@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shivansh_verma3/pages/OnBoarding.dart';
-import 'package:shivansh_verma3/pages/home.dart';
+//import 'package:shivansh_verma3/pages/home.dart';
 
 void main() {
   runApp(const MyApp());

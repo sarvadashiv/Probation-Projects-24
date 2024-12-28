@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shivansh_verma3/pages/subject_selection_screen.dart';
 
-import 'home.dart';
+//import 'home.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -29,7 +30,7 @@ class _OnboardingState extends State<Onboarding> {
                   
                   child: GestureDetector(
                     onTap: (){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SubjectSelectionScreen()));
                     },
                     child: Container(
                       margin: EdgeInsets.only(bottom: 120),
