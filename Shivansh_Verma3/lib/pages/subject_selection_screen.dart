@@ -16,72 +16,118 @@ class SubjectSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Select a Subject'),
-      ),
-      body: ListView.builder(
-        itemCount: subjects.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QuestionCountScreen(category: subjects[index]),
-                  ),
-                );
-              },
-              child: Text(subjects[index]),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class QuestionCountScreen extends StatelessWidget {
-  final String category;
-  final TextEditingController _controller = TextEditingController();
-
-  QuestionCountScreen({required this.category});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Select Number of Questions for $category'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/bg1.jpg'),
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
           children: [
-            TextField(
-              controller: _controller,
-              decoration: InputDecoration(
-                labelText: 'Enter number of questions',
-                border: OutlineInputBorder(),
+            Padding(
+              padding: const EdgeInsets.only(top: 50.0),
+              child: Text(
+                'Select a Subject',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+                textAlign: TextAlign.center,
               ),
-              keyboardType: TextInputType.number,
             ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                int questionCount = int.tryParse(_controller.text) ?? 1;
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => QuizScreen(category: category, questionCount: questionCount),
-                  ),
-                );
-              },
-              child: Text('Start Quiz'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: subjects.length,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        _showQuestionCountDialog(context, subjects[index]);
+                      },
+                      child: Text(subjects[index], style: TextStyle(color: Colors.white)),
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  void _showQuestionCountDialog(BuildContext context, String category) {
+    int selectedCount = 1;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black,
+          title: Text(
+            'Select Number of Questions',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Container(
+                height: 150,
+                child: ListWheelScrollView.useDelegate(
+                  itemExtent: 50,
+                  physics: FixedExtentScrollPhysics(),
+                  onSelectedItemChanged: (index) {
+                    // Update the selected index when user scrolls
+                    setState(() {
+                      selectedCount = index + 1;
+                    });
+                  },
+                  childDelegate: ListWheelChildBuilderDelegate(
+                    builder: (context, index) {
+                      return Center(
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: (index + 1 == selectedCount) ? Colors.yellow : Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: 50,
+                  ),
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuizScreen(
+                      category: category,
+                      questionCount: selectedCount,
+                    ),
+                  ),
+                );
+              },
+              child: Text('Start Quiz', style: TextStyle(color: Colors.black)),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
+            ),
+          ],
+        );
+      },
     );
   }
 }
