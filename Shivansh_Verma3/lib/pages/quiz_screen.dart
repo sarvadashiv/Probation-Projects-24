@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:html/parser.dart' as htmlParser;
+import 'package:shivansh_verma3/pages/Summary.dart';
 
 class QuizScreen extends StatefulWidget {
   final String category;
@@ -19,7 +20,7 @@ class _QuizScreenState extends State<QuizScreen> {
   bool isLoading = true;
   bool isAnswered = false;
   String? selectedAnswer;
-  Map<int, String> markedAnswers = {}; // New variable to track marked answer
+  Map<int, String> markedAnswers = {};
   int correctAnswers = 0;
 
   @override
@@ -72,7 +73,7 @@ class _QuizScreenState extends State<QuizScreen> {
         return 12;
       case 'Science: Nature':
         return 17;
-      case 'Food & Drink':
+      case 'Maths':
         return 19;
       default:
         return 9;
@@ -84,7 +85,6 @@ class _QuizScreenState extends State<QuizScreen> {
       return;
     }
 
-    // Check if 'choices' already exist to avoid duplication
     if (!questions[currentQuestionIndex].containsKey('choices')) {
       List<String> choices = List<String>.from(
           questions[currentQuestionIndex]['incorrect_answers']);
@@ -100,7 +100,7 @@ class _QuizScreenState extends State<QuizScreen> {
         currentQuestionIndex--;
         isAnswered = markedAnswers.containsKey(currentQuestionIndex);
         shuffleOptions();
-        selectedAnswer = null; // Reset only the temporary selection
+        selectedAnswer = null;
       });
     }
   }
@@ -111,7 +111,7 @@ class _QuizScreenState extends State<QuizScreen> {
         currentQuestionIndex++;
         isAnswered = markedAnswers.containsKey(currentQuestionIndex);
         shuffleOptions();
-        selectedAnswer = null; // Reset only the temporary selection
+        selectedAnswer = null;
       });
     }
   }
@@ -126,81 +126,143 @@ class _QuizScreenState extends State<QuizScreen> {
     if (selectedAnswer != null) {
       setState(() {
         markedAnswers[currentQuestionIndex] =
-            selectedAnswer!; // Save the marked answer for the current question
+            selectedAnswer!;
         if (selectedAnswer ==
             questions[currentQuestionIndex]['correct_answer']) {
           correctAnswers++;
         }
-        selectedAnswer = null; // Reset selected answer
+        selectedAnswer = null;
       });
     }
   }
 
   void showSummary() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Quiz Summary"),
-          content: Text(
-              "You got $correctAnswers out of ${widget.questionCount} correct!"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              },
-              child: Text("Go Back"),
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => SummaryScreen(
+        subjectName: widget.category,
+        correctAnswers: correctAnswers,
+        totalQuestions: widget.questionCount,
+        unattemptedQuestions: widget.questionCount - markedAnswers.length,
+      ),
+    ),
+  );
+}
+
+void _showQuestionCountDialog() {
+  int selectedCount = 1;
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.black,
+        title: Text(
+          'Select Number of Questions',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              height: 150,
+              child: ListWheelScrollView.useDelegate(
+                itemExtent: 50,
+                physics: FixedExtentScrollPhysics(),
+                onSelectedItemChanged: (index) {
+                  setState(() {
+                    selectedCount = index + 1;
+                  });
+                },
+                childDelegate: ListWheelChildBuilderDelegate(
+                  builder: (context, index) {
+                    return Center(
+                      child: Text(
+                        '${index + 1}',
+                        style: TextStyle(
+                          fontSize: 24,
+                          color: (index + 1 == selectedCount)
+                              ? Colors.yellow
+                              : Colors.grey,
+                        ),
+                      ),
+                    );
+                  },
+                  childCount: 50,
+                ),
+              ),
+            );
+          },
+        ),
+        actions: <Widget>[
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                currentQuestionIndex = 0;
+                correctAnswers = 0;
+                isAnswered = false;
+                selectedAnswer = null;
+                markedAnswers.clear();
+                questions.clear();
+                isLoading = true;
+              });
+
+              Navigator.pop(context); // Close the dialog
+              Navigator.pop(context); // Close the summary dialog
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QuizScreen(
+                    category: widget.category,
+                    questionCount: selectedCount,
+                  ),
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
+            child: Text(
+              'Restart Quiz',
+              style: TextStyle(color: Colors.black),
             ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  currentQuestionIndex = 0;
-                  correctAnswers = 0;
-                  isAnswered = false;
-                  selectedAnswer = null;
-                  markedAnswers.clear();
-                  questions.clear();
-                  isLoading = true;
-                });
-                Navigator.pop(context);
-                fetchQuestions();
-              },
-              child: Text("Restart Quiz"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+          ),
+        ],
+      );
+    },
+  );
+}
+
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : questions.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('No questions available.'),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: fetchQuestions, // Retry loading questions
-                        child: Text('Retry'),
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: isLoading
+        ? Center(child: CircularProgressIndicator())
+        : questions.isEmpty
+            ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('No questions available.'),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: fetchQuestions,
+                      child: Text('Retry'),
+                    ),
+                  ],
+                ),
+              )
+            : Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('images/bg1.jpg'),
+                        fit: BoxFit.cover,
                       ),
-                    ],
-                  ),
-                )
-              : Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage('images/bg1.jpg'),
-                      fit: BoxFit.cover,
                     ),
                   ),
-                  child: Column(
+                  Column(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(top: 50.0),
@@ -214,161 +276,172 @@ class _QuizScreenState extends State<QuizScreen> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      SizedBox(height: 50),
-                      Container(
-                        padding: EdgeInsets.all(16.0),
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.8),
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                        margin: EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      SizedBox(height: 30),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Container(
+                            padding: EdgeInsets.all(16.0),
+                            decoration: BoxDecoration(
+                              color: Colors.black.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            margin: EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Column(
                               children: [
-                                IconButton(
-                                  icon: Icon(Icons.arrow_back,
-                                      color: currentQuestionIndex > 0
-                                          ? Colors.white
-                                          : Colors.grey),
-                                  onPressed: currentQuestionIndex > 0
-                                      ? previousQuestion
-                                      : null,
-                                ),
-                                Text(
-                                  'Question ${currentQuestionIndex + 1} of ${widget.questionCount}',
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.arrow_forward,
-                                      color: currentQuestionIndex <
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    IconButton(
+                                      icon: Icon(Icons.arrow_back,
+                                          color: currentQuestionIndex > 0
+                                              ? Colors.white
+                                              : Colors.grey),
+                                      onPressed: currentQuestionIndex > 0
+                                          ? previousQuestion
+                                          : null,
+                                    ),
+                                    Text(
+                                      'Question ${currentQuestionIndex + 1} of ${widget.questionCount}',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white),
+                                    ),
+                                    IconButton(
+                                      icon: Icon(Icons.arrow_forward,
+                                          color: currentQuestionIndex <
+                                                  questions.length - 1
+                                              ? Colors.white
+                                              : Colors.grey),
+                                      onPressed: currentQuestionIndex <
                                               questions.length - 1
-                                          ? Colors.white
-                                          : Colors.grey),
-                                  onPressed: currentQuestionIndex <
-                                          questions.length - 1
-                                      ? nextQuestion
-                                      : null,
+                                          ? nextQuestion
+                                          : null,
+                                    ),
+                                  ],
                                 ),
+                                SizedBox(height: 20),
+                                Text(
+                                  htmlParser
+                                          .parse(questions[currentQuestionIndex]
+                                              ['question'])
+                                          .documentElement
+                                          ?.text ??
+                                      '',
+                                  style: TextStyle(
+                                      fontSize: 22, color: Colors.white),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 20),
+                                ..._buildChoices(),
                               ],
                             ),
-                            SizedBox(height: 20),
-                            Text(
-                              htmlParser
-                                      .parse(questions[currentQuestionIndex]
-                                          ['question'])
-                                      .documentElement
-                                      ?.text ??
-                                  '',
-                              style:
-                                  TextStyle(fontSize: 22, color: Colors.white),
-                              textAlign: TextAlign.center,
-                            ),
-                            SizedBox(height: 20),
-                            ..._buildChoices(),
-                          ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: selectedAnswer != null &&
-                                !markedAnswers.containsKey(currentQuestionIndex)
-                            ? markAnswer
-                            : null, // Enable only if an option is selected
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 14.0, horizontal: 36.0),
-                        ),
-                        child: Text('Mark Answer'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          ElevatedButton(
+                            onPressed: selectedAnswer != null &&
+                                    !markedAnswers
+                                        .containsKey(currentQuestionIndex)
+                                ? markAnswer
+                                : null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 14.0, horizontal: 36.0),
+                            ),
+                            child: Text('Mark Answer'),
+                          ),
+                          ElevatedButton(
+                            onPressed: showSummary,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black,
+                              foregroundColor: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 14.0, horizontal: 36.0),
+                            ),
+                            child: Text('Submit Answers'),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 10),
-                      ElevatedButton(
-                        onPressed: showSummary,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          foregroundColor: Colors.white,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 14.0, horizontal: 36.0),
-                        ),
-                        child: Text('Submit Answers'),
-                      ),
+                      SizedBox(height: 20),
                     ],
                   ),
-                ),
-    );
-  }
+                ],
+              ),
+  );
+}
 
   List<Widget> _buildChoices() {
-    if (questions.isEmpty || currentQuestionIndex >= questions.length) {
-      return [
-        Text('No questions available', style: TextStyle(color: Colors.white))
-      ];
+  if (questions.isEmpty || currentQuestionIndex >= questions.length) {
+    return [
+      Text('No questions available', style: TextStyle(color: Colors.white))
+    ];
+  }
+
+  List<String> choices =
+      List<String>.from(questions[currentQuestionIndex]['choices']);
+  String? markedAnswer = markedAnswers[
+      currentQuestionIndex];
+
+  return choices.map((choice) {
+    String decodedChoice =
+        htmlParser.parse(choice).documentElement?.text ?? choice;
+    bool isCorrect =
+        decodedChoice == questions[currentQuestionIndex]['correct_answer'];
+
+    Color backgroundColor = Colors.transparent;
+    Color borderColor = Colors.white;
+
+    if (markedAnswer != null) {
+      if (isCorrect) {
+        backgroundColor = Colors.green;
+      } else if (markedAnswer == decodedChoice) {
+        backgroundColor = Colors.red;
+      }
+    } else if (selectedAnswer == decodedChoice) {
+      borderColor = Colors.blue;
     }
 
-    List<String> choices =
-        List<String>.from(questions[currentQuestionIndex]['choices']);
-    String? markedAnswer = markedAnswers[
-        currentQuestionIndex]; // Get the marked answer for the current question
-
-    return choices.map((choice) {
-      String decodedChoice =
-          htmlParser.parse(choice).documentElement?.text ?? choice;
-      bool isCorrect =
-          decodedChoice == questions[currentQuestionIndex]['correct_answer'];
-
-      // Define styles based on the state
-      Color backgroundColor = Colors.transparent; // Default background
-      Color borderColor = Colors.white; // Default border
-
-      if (markedAnswer != null) {
-        if (isCorrect) {
-          backgroundColor = Colors.green; // Mark correct answer green
-        } else if (markedAnswer == decodedChoice) {
-          backgroundColor = Colors.red; // Mark incorrect selection red
-        }
-      } else if (selectedAnswer == decodedChoice) {
-        borderColor = Colors.blue; // Highlight selected option
-      }
-
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-        child: SizedBox(
-          width: double.infinity,
-          child: ElevatedButton(
-            onPressed: markedAnswer != null
-                ? null // Disable interaction if already marked
-                : () => checkAnswer(decodedChoice),
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(backgroundColor),
-              side: MaterialStateProperty.all(
-                  BorderSide(color: borderColor, width: 2)),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
-                ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+      child: SizedBox(
+        width: double.infinity,
+        child: ElevatedButton(
+          onPressed: markedAnswer != null
+              ? null
+              : () => checkAnswer(decodedChoice),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(backgroundColor),
+            side: MaterialStateProperty.all(
+                BorderSide(color: borderColor, width: 2)),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50),
               ),
-              padding: MaterialStateProperty.all(
-                  EdgeInsets.symmetric(vertical: 16.0)),
-              elevation: MaterialStateProperty.all(0),
             ),
-            child: Center(
-              child: Text(
-                decodedChoice,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                ),
+            padding: MaterialStateProperty.all(EdgeInsets.symmetric(
+                vertical: 16.0, horizontal: 20.0)),
+            elevation: MaterialStateProperty.all(0),
+          ),
+          child: Center(
+            child: Text(
+              decodedChoice,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
               ),
             ),
           ),
         ),
-      );
-    }).toList();
-  }
+      ),
+    );
+  }).toList();
+}
 }

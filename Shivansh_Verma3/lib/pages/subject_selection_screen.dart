@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'quiz_screen.dart';
 
 class SubjectSelectionScreen extends StatelessWidget {
@@ -10,56 +11,62 @@ class SubjectSelectionScreen extends StatelessWidget {
     'Geography',
     'Music',
     'Science: Nature',
-    'Food & Drink',
+    'Maths',
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('images/bg1.jpg'),
-            fit: BoxFit.cover,
+    return WillPopScope(
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return false;
+      },
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('images/bg1.jpg'),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 50.0),
-              child: Text(
-                'Select a Subject',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 50.0),
+                child: Text(
+                  'Select a Subject',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: subjects.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: subjects.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
                         ),
+                        onPressed: () {
+                          _showQuestionCountDialog(context, subjects[index]);
+                        },
+                        child: Text(subjects[index], style: TextStyle(color: Colors.white)),
                       ),
-                      onPressed: () {
-                        _showQuestionCountDialog(context, subjects[index]);
-                      },
-                      child: Text(subjects[index], style: TextStyle(color: Colors.white)),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -85,7 +92,6 @@ class SubjectSelectionScreen extends StatelessWidget {
                   itemExtent: 50,
                   physics: FixedExtentScrollPhysics(),
                   onSelectedItemChanged: (index) {
-                    // Update the selected index when user scrolls
                     setState(() {
                       selectedCount = index + 1;
                     });
