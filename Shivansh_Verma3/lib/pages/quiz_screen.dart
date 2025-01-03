@@ -22,6 +22,7 @@ class _QuizScreenState extends State<QuizScreen> {
   String? selectedAnswer;
   Map<int, String> markedAnswers = {};
   int correctAnswers = 0;
+  bool isReviewMode = false;
 
   @override
   void initState() {
@@ -125,8 +126,7 @@ class _QuizScreenState extends State<QuizScreen> {
   void markAnswer() {
     if (selectedAnswer != null) {
       setState(() {
-        markedAnswers[currentQuestionIndex] =
-            selectedAnswer!;
+        markedAnswers[currentQuestionIndex] = selectedAnswer!;
         if (selectedAnswer ==
             questions[currentQuestionIndex]['correct_answer']) {
           correctAnswers++;
@@ -137,92 +137,53 @@ class _QuizScreenState extends State<QuizScreen> {
   }
 
   void showSummary() {
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => SummaryScreen(
-        subjectName: widget.category,
-        correctAnswers: correctAnswers,
-        totalQuestions: widget.questionCount,
-        unattemptedQuestions: widget.questionCount - markedAnswers.length,
-      ),
-    ),
-  );
-}
-
-void _showQuestionCountDialog() {
-  int selectedCount = 1;
-
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         backgroundColor: Colors.black,
         title: Text(
-          'Select Number of Questions',
+          'Submit Answers',
           style: TextStyle(color: Colors.white),
         ),
-        content: StatefulBuilder(
-          builder: (context, setState) {
-            return Container(
-              height: 150,
-              child: ListWheelScrollView.useDelegate(
-                itemExtent: 50,
-                physics: FixedExtentScrollPhysics(),
-                onSelectedItemChanged: (index) {
-                  setState(() {
-                    selectedCount = index + 1;
-                  });
-                },
-                childDelegate: ListWheelChildBuilderDelegate(
-                  builder: (context, index) {
-                    return Center(
-                      child: Text(
-                        '${index + 1}',
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: (index + 1 == selectedCount)
-                              ? Colors.yellow
-                              : Colors.grey,
-                        ),
-                      ),
-                    );
-                  },
-                  childCount: 50,
-                ),
-              ),
-            );
-          },
+        content: Text(
+          'Are you sure you want to submit your answers?',
+          style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.yellow),
+            ),
+          ),
           ElevatedButton(
             onPressed: () {
-              setState(() {
-                currentQuestionIndex = 0;
-                correctAnswers = 0;
-                isAnswered = false;
-                selectedAnswer = null;
-                markedAnswers.clear();
-                questions.clear();
-                isLoading = true;
-              });
-
-              Navigator.pop(context); // Close the dialog
-              Navigator.pop(context); // Close the summary dialog
-
-              Navigator.pushReplacement(
+              Navigator.of(context).pop(); // Close the dialog
+              Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => QuizScreen(
-                    category: widget.category,
-                    questionCount: selectedCount,
+                  builder: (context) => SummaryScreen(
+                    subjectName: widget.category,
+                    correctAnswers: correctAnswers,
+                    totalQuestions: widget.questionCount,
+                    unattemptedQuestions: widget.questionCount -
+                        markedAnswers.length,
                   ),
                 ),
-              );
+              ).then((_) {
+                setState(() {
+                  isReviewMode = true;
+                  selectedAnswer = null; // Enable review mode when returning from summary
+                });
+              });
             },
             style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
             child: Text(
-              'Restart Quiz',
+              'Submit',
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -232,216 +193,297 @@ void _showQuestionCountDialog() {
   );
 }
 
+  void _showQuestionCountDialog() {
+    int selectedCount = 1;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.black,
+          title: Text(
+            'Select Number of Questions',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: StatefulBuilder(
+            builder: (context, setState) {
+              return Container(
+                height: 150,
+                child: ListWheelScrollView.useDelegate(
+                  itemExtent: 50,
+                  physics: FixedExtentScrollPhysics(),
+                  onSelectedItemChanged: (index) {
+                    setState(() {
+                      selectedCount = index + 1;
+                    });
+                  },
+                  childDelegate: ListWheelChildBuilderDelegate(
+                    builder: (context, index) {
+                      return Center(
+                        child: Text(
+                          '${index + 1}',
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: (index + 1 == selectedCount)
+                                ? Colors.yellow
+                                : Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
+                    childCount: 50,
+                  ),
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  currentQuestionIndex = 0;
+                  correctAnswers = 0;
+                  isAnswered = false;
+                  selectedAnswer = null;
+                  markedAnswers.clear();
+                  questions.clear();
+                  isLoading = true;
+                });
+
+                Navigator.pop(context); // Close the dialog
+                Navigator.pop(context); // Close the summary dialog
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => QuizScreen(
+                      category: widget.category,
+                      questionCount: selectedCount,
+                    ),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.yellow),
+              child: Text(
+                'Restart Quiz',
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: isLoading
-        ? Center(child: CircularProgressIndicator())
-        : questions.isEmpty
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : questions.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('No questions available.'),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: fetchQuestions,
+                        child: Text('Retry'),
+                      ),
+                    ],
+                  ),
+                )
+              : Stack(
                   children: [
-                    Text('No questions available.'),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: fetchQuestions,
-                      child: Text('Retry'),
+                    Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('images/bg1.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: Text(
+                            widget.category,
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 30),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Container(
+                              padding: EdgeInsets.all(16.0),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.8),
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              margin: EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.arrow_back,
+                                            color: currentQuestionIndex > 0
+                                                ? Colors.white
+                                                : Colors.grey),
+                                        onPressed: currentQuestionIndex > 0
+                                            ? previousQuestion
+                                            : null,
+                                      ),
+                                      Text(
+                                        'Question ${currentQuestionIndex + 1} of ${widget.questionCount}',
+                                        style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white),
+                                      ),
+                                      IconButton(
+                                        icon: Icon(Icons.arrow_forward,
+                                            color: currentQuestionIndex <
+                                                    questions.length - 1
+                                                ? Colors.white
+                                                : Colors.grey),
+                                        onPressed: currentQuestionIndex <
+                                                questions.length - 1
+                                            ? nextQuestion
+                                            : null,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    htmlParser
+                                            .parse(
+                                                questions[currentQuestionIndex]
+                                                    ['question'])
+                                            .documentElement
+                                            ?.text ??
+                                        '',
+                                    style: TextStyle(
+                                        fontSize: 22, color: Colors.white),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 20),
+                                  ..._buildChoices(),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            ElevatedButton(
+                              onPressed: showSummary,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 14.0, horizontal: 36.0),
+                              ),
+                              child: Text('Submit Answers'),
+                            ),
+                            ElevatedButton(
+                              onPressed: selectedAnswer != null &&
+                                      !markedAnswers
+                                          .containsKey(currentQuestionIndex)
+                                  ? markAnswer
+                                  : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                foregroundColor: Colors.white,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 14.0, horizontal: 36.0),
+                              ),
+                              child: Text('Mark Answer'),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                      ],
                     ),
                   ],
                 ),
-              )
-            : Stack(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('images/bg1.jpg'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 50.0),
-                        child: Text(
-                          widget.category,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      SizedBox(height: 30),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Container(
-                            padding: EdgeInsets.all(16.0),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.8),
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            margin: EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(Icons.arrow_back,
-                                          color: currentQuestionIndex > 0
-                                              ? Colors.white
-                                              : Colors.grey),
-                                      onPressed: currentQuestionIndex > 0
-                                          ? previousQuestion
-                                          : null,
-                                    ),
-                                    Text(
-                                      'Question ${currentQuestionIndex + 1} of ${widget.questionCount}',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.arrow_forward,
-                                          color: currentQuestionIndex <
-                                                  questions.length - 1
-                                              ? Colors.white
-                                              : Colors.grey),
-                                      onPressed: currentQuestionIndex <
-                                              questions.length - 1
-                                          ? nextQuestion
-                                          : null,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 20),
-                                Text(
-                                  htmlParser
-                                          .parse(questions[currentQuestionIndex]
-                                              ['question'])
-                                          .documentElement
-                                          ?.text ??
-                                      '',
-                                  style: TextStyle(
-                                      fontSize: 22, color: Colors.white),
-                                  textAlign: TextAlign.center,
-                                ),
-                                SizedBox(height: 20),
-                                ..._buildChoices(),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          ElevatedButton(
-                            onPressed: selectedAnswer != null &&
-                                    !markedAnswers
-                                        .containsKey(currentQuestionIndex)
-                                ? markAnswer
-                                : null,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              foregroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 14.0, horizontal: 36.0),
-                            ),
-                            child: Text('Mark Answer'),
-                          ),
-                          ElevatedButton(
-                            onPressed: showSummary,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              foregroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 14.0, horizontal: 36.0),
-                            ),
-                            child: Text('Submit Answers'),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                    ],
-                  ),
-                ],
-              ),
-  );
-}
-
-  List<Widget> _buildChoices() {
-  if (questions.isEmpty || currentQuestionIndex >= questions.length) {
-    return [
-      Text('No questions available', style: TextStyle(color: Colors.white))
-    ];
+    );
   }
 
-  List<String> choices =
-      List<String>.from(questions[currentQuestionIndex]['choices']);
-  String? markedAnswer = markedAnswers[
-      currentQuestionIndex];
-
-  return choices.map((choice) {
-    String decodedChoice =
-        htmlParser.parse(choice).documentElement?.text ?? choice;
-    bool isCorrect =
-        decodedChoice == questions[currentQuestionIndex]['correct_answer'];
-
-    Color backgroundColor = Colors.transparent;
-    Color borderColor = Colors.white;
-
-    if (markedAnswer != null) {
-      if (isCorrect) {
-        backgroundColor = Colors.green;
-      } else if (markedAnswer == decodedChoice) {
-        backgroundColor = Colors.red;
-      }
-    } else if (selectedAnswer == decodedChoice) {
-      borderColor = Colors.blue;
+  List<Widget> _buildChoices() {
+    if (questions.isEmpty || currentQuestionIndex >= questions.length) {
+      return [
+        Text('No questions available', style: TextStyle(color: Colors.white))
+      ];
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
-      child: SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: markedAnswer != null
-              ? null
-              : () => checkAnswer(decodedChoice),
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(backgroundColor),
-            side: MaterialStateProperty.all(
-                BorderSide(color: borderColor, width: 2)),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+    List<String> choices =
+        List<String>.from(questions[currentQuestionIndex]['choices']);
+    String? markedAnswer = markedAnswers[currentQuestionIndex];
+
+    return choices.map((choice) {
+      String decodedChoice =
+          htmlParser.parse(choice).documentElement?.text ?? choice;
+      bool isCorrect =
+          decodedChoice == questions[currentQuestionIndex]['correct_answer'];
+
+      Color backgroundColor = Colors.transparent;
+      Color borderColor = Colors.white;
+
+      if (markedAnswer != null) {
+        if (isCorrect) {
+          backgroundColor = Colors.green;
+        } else if (markedAnswer == decodedChoice) {
+          backgroundColor = Colors.red;
+        }
+      } else if (selectedAnswer == decodedChoice) {
+        borderColor = Colors.blue;
+      }
+
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+        child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: (isReviewMode || markedAnswer != null)
+                ? null
+                : () => checkAnswer(decodedChoice), // Disable in review mode
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(backgroundColor),
+              side: MaterialStateProperty.all(
+                  BorderSide(color: borderColor, width: 2)),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
               ),
+              padding: MaterialStateProperty.all(
+                  EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0)),
+              elevation: MaterialStateProperty.all(0),
             ),
-            padding: MaterialStateProperty.all(EdgeInsets.symmetric(
-                vertical: 16.0, horizontal: 20.0)),
-            elevation: MaterialStateProperty.all(0),
-          ),
-          child: Center(
-            child: Text(
-              decodedChoice,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18,
+            child: Center(
+              child: Text(
+                decodedChoice,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                ),
               ),
             ),
           ),
         ),
-      ),
-    );
-  }).toList();
-}
+      );
+    }).toList();
+  }
 }

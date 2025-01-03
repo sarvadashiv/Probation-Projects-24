@@ -99,7 +99,7 @@ class SummaryScreen extends StatelessWidget {
               ),
               child: Text(
                 "Restart Quiz",
-                style: TextStyle(fontSize: 18, color: Colors.yellowAccent),
+                style: TextStyle(fontSize: 18, color: Colors.yellow),
               ),
             ),
           ],
