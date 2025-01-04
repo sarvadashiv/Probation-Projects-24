@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-
+import 'package:confetti/confetti.dart';
 import 'package:shivansh_verma3/pages/subject_selection_screen.dart';
 
-class SummaryScreen extends StatelessWidget {
+class SummaryScreen extends StatefulWidget {
   final String subjectName;
   final int correctAnswers;
   final int totalQuestions;
@@ -17,10 +17,38 @@ class SummaryScreen extends StatelessWidget {
   });
 
   @override
+  _SummaryScreenState createState() => _SummaryScreenState();
+}
+
+class _SummaryScreenState extends State<SummaryScreen> {
+  late ConfettiController _confettiController;
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController = ConfettiController(duration: Duration(seconds: 2));
+
+    if (widget.correctAnswers >= 1 &&
+        widget.correctAnswers >= widget.totalQuestions / 2) {
+      _confettiController.play();
+    }
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final double percentageCorrect = correctAnswers / totalQuestions;
+    final double percentageCorrect = widget.correctAnswers / widget.totalQuestions;
     final double percentageIncorrect =
-        (totalQuestions - correctAnswers - unattemptedQuestions) / totalQuestions;
+        (widget.totalQuestions - widget.correctAnswers - widget.unattemptedQuestions) /
+            widget.totalQuestions;
+
+    final bool showConfetti =
+        widget.correctAnswers >= 1 && widget.correctAnswers >= widget.totalQuestions / 2;
 
     return Scaffold(
       body: Container(
@@ -30,77 +58,108 @@ class SummaryScreen extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Stack(
           children: [
-            Text(
-              "Quiz Summary - $subjectName",
-              style: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 40),
-            SizedBox(
-              width: double.infinity,
-              height: 100,
-              child: CustomPaint(
-                size: Size(double.infinity, 100),
-                painter: RingPainter(
-                  percentageCorrect: percentageCorrect,
-                  percentageIncorrect: percentageIncorrect,
+            if (showConfetti)
+              Positioned(
+                top: 0,
+                left: 225,
+                right: 0,
+                child: ConfettiWidget(
+                  confettiController: _confettiController,
+                  blastDirectionality: BlastDirectionality.explosive,
+                  shouldLoop: false,
+                  colors: [Colors.green, Colors.blue, Colors.yellow, Colors.pink],
+                  numberOfParticles: 50,
                 ),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "$correctAnswers / $totalQuestions",
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
+              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Quiz Summary - ${widget.subjectName}",
+                  style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: 40),
+                SizedBox(
+                  width: double.infinity,
+                  height: 100,
+                  child: CustomPaint(
+                    size: Size(double.infinity, 100),
+                    painter: RingPainter(
+                      percentageCorrect: percentageCorrect,
+                      percentageIncorrect: percentageIncorrect,
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "${widget.correctAnswers} / ${widget.totalQuestions}",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Text(
+                            "Correct",
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        "Correct",
-                        style: TextStyle(
-                          fontSize: 22,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(height: 40),
-            Text(
-              "Unattempted Questions: $unattemptedQuestions",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.black,
-              ),
-            ),
-            SizedBox(height: 50),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => SubjectSelectionScreen()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-              ),
-              child: Text(
-                "Restart Quiz",
-                style: TextStyle(fontSize: 18, color: Colors.yellow),
-              ),
+                SizedBox(height: 40),
+                Text(
+                  "Unattempted Questions: ${widget.unattemptedQuestions}",
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
+                ),
+                if (!showConfetti)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Text(
+                      "Better Luck Next Time!",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                SizedBox(height: 50),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SubjectSelectionScreen(),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.black,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  ),
+                  child: Text(
+                    "Restart Quiz",
+                    style: TextStyle(fontSize: 18, color: Colors.yellow),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
