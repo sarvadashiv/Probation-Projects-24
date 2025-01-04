@@ -16,6 +16,9 @@ class SubjectSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return WillPopScope(
       onWillPop: () async {
         SystemNavigator.pop();
@@ -32,11 +35,11 @@ class SubjectSelectionScreen extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 50.0),
+                padding: EdgeInsets.only(top: screenHeight * 0.075),
                 child: Text(
                   'Select a Subject',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: screenWidth * 0.08,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -48,18 +51,30 @@ class SubjectSelectionScreen extends StatelessWidget {
                   itemCount: subjects.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: EdgeInsets.symmetric(
+                        vertical: screenHeight * 0.015,
+                        horizontal: screenWidth * 0.05,
+                      ),
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.black,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.02,
+                          ),
                         ),
                         onPressed: () {
                           _showQuestionCountDialog(context, subjects[index]);
                         },
-                        child: Text(subjects[index], style: TextStyle(color: Colors.white)),
+                        child: Text(
+                          subjects[index],
+                          style: TextStyle(
+                            fontSize: screenWidth * 0.05,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     );
                   },
@@ -103,7 +118,9 @@ class SubjectSelectionScreen extends StatelessWidget {
                           '${index + 1}',
                           style: TextStyle(
                             fontSize: 24,
-                            color: (index + 1 == selectedCount) ? Colors.yellow : Colors.grey,
+                            color: (index + 1 == selectedCount)
+                                ? Colors.yellow
+                                : Colors.grey,
                           ),
                         ),
                       );

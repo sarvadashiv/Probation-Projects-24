@@ -42,6 +42,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     final double percentageCorrect = widget.correctAnswers / widget.totalQuestions;
     final double percentageIncorrect =
         (widget.totalQuestions - widget.correctAnswers - widget.unattemptedQuestions) /
@@ -63,7 +65,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
             if (showConfetti)
               Positioned(
                 top: 0,
-                left: 225,
+                left: screenWidth * 0.4,
                 right: 0,
                 child: ConfettiWidget(
                   confettiController: _confettiController,
@@ -77,21 +79,24 @@ class _SummaryScreenState extends State<SummaryScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
-                  "Quiz Summary - ${widget.subjectName}",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Text(
+                    "Quiz Summary - ${widget.subjectName}",
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.07,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 40),
+                SizedBox(height: screenHeight * 0.05),
                 SizedBox(
                   width: double.infinity,
-                  height: 100,
+                  height: screenHeight * 0.2,
                   child: CustomPaint(
-                    size: Size(double.infinity, 100),
+                    size: Size(double.infinity, screenHeight * 0.2),
                     painter: RingPainter(
                       percentageCorrect: percentageCorrect,
                       percentageIncorrect: percentageIncorrect,
@@ -103,7 +108,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           Text(
                             "${widget.correctAnswers} / ${widget.totalQuestions}",
                             style: TextStyle(
-                              fontSize: 24,
+                              fontSize: screenWidth * 0.06,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                             ),
@@ -111,7 +116,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                           Text(
                             "Correct",
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: screenWidth * 0.05,
                               color: Colors.black,
                             ),
                           ),
@@ -120,12 +125,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     ),
                   ),
                 ),
-                SizedBox(height: 40),
-                Text(
-                  "Unattempted Questions: ${widget.unattemptedQuestions}",
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
+                SizedBox(height: screenHeight * 0.05),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05),
+                  child: Text(
+                    "Unattempted Questions: ${widget.unattemptedQuestions}",
+                    style: TextStyle(
+                      fontSize: screenWidth * 0.05,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 if (!showConfetti)
@@ -134,13 +142,13 @@ class _SummaryScreenState extends State<SummaryScreen> {
                     child: Text(
                       "Better Luck Next Time!",
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: screenWidth * 0.06,
                         fontWeight: FontWeight.bold,
                         color: Colors.red,
                       ),
                     ),
                   ),
-                SizedBox(height: 50),
+                SizedBox(height: screenHeight * 0.1),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushReplacement(
@@ -152,11 +160,12 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.black,
-                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth * 0.1, vertical: screenHeight * 0.02),
                   ),
                   child: Text(
                     "Restart Quiz",
-                    style: TextStyle(fontSize: 18, color: Colors.yellow),
+                    style: TextStyle(fontSize: screenWidth * 0.05, color: Colors.yellow),
                   ),
                 ),
               ],
