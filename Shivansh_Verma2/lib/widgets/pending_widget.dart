@@ -96,7 +96,8 @@ class _PendingWidgetState extends State<PendingWidget> {
                 });}
             else{
               return Center(
-                child: CircularProgressIndicator(color: Colors.white,)
+                //child: CircularProgressIndicator(color: Colors.white,)
+                child: Text('Wohoo! No pending tasks.', style: TextStyle(color: Colors.grey),)
               );
           }
     }

@@ -91,7 +91,8 @@ class _CompletedWidgetState extends State<CompletedWidget> {
                 });}
           else{
             return Center(
-                child: CircularProgressIndicator(color: Colors.deepPurple)
+                //child: CircularProgressIndicator(color: Colors.deepPurple)
+                child: Text('Hurry Up! Complete a task.', style: TextStyle(color: Colors.grey),)
             );
           }
         }
