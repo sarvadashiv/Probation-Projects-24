@@ -4,13 +4,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-
-  // Sign in with Google
   Future<User?> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
-        // User canceled the sign-in
         return null;
       }
 
@@ -27,8 +24,6 @@ class AuthService {
       throw Exception('Google Sign-In failed. Please try again.');
     }
   }
-
-  // Sign in with email and password
   Future<User?> signInWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result =
@@ -49,8 +44,6 @@ class AuthService {
       throw Exception('An unknown error occurred. Please try again.');
     }
   }
-
-  // Register with email and password
   Future<User?> registerWithEmailAndPassword(String email, String password) async {
     try {
       UserCredential result =
@@ -71,8 +64,6 @@ class AuthService {
       throw Exception('An unknown error occurred. Please try again.');
     }
   }
-
-  // Sign out
   Future<void> signOut() async {
     try {
       return await _auth.signOut();

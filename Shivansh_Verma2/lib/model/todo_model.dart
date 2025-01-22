@@ -1,15 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
-class ToDo{
+class ToDo {
   final String id;
   final String title;
   final String description;
   final bool completed;
-  final Timestamp timeStamp;
+  final DateTime createdAt;
 
-  ToDo({required this.id,
+  ToDo({
+    required this.id,
     required this.title,
     required this.description,
     required this.completed,
-    required this.timeStamp});
+    required this.createdAt
+  });
 }
