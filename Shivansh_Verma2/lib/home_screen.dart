@@ -49,9 +49,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _fetchPendingTasksForMonth() {
     DatabaseServices().getTodosForMonth(_currentMonth).listen((tasks) {
-      setState(() {
-        _pendingTasksForMonth = tasks.where((task) => !task.completed).toList();
-      });
+      if(mounted){
+        setState(() {
+          _pendingTasksForMonth = tasks.where((task) => !task.completed).toList();
+        });
+      }
     });
   }
 
@@ -229,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (hasPendingTasks)
                                 Positioned(
                                   bottom:
-                                      4,
+                                      MediaQuery.of(context).size.width / 45,     
                                   child: Container(
                                     width: 6,
                                     height: 6,
@@ -309,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-
+            
             SizedBox(height: 20),
             _widgets[_buttonIndex],
           ],
@@ -415,6 +417,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   _selectedDate,
                 );
                 Navigator.pop(context);
+                _fetchPendingTasksForMonth();
               },
               child: Text('Add'),
             ),

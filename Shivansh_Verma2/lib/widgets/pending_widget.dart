@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:shivansh_verma2/home_screen.dart';
 import 'package:shivansh_verma2/model/todo_model.dart';
 import 'package:shivansh_verma2/services/database_services.dart';
 
@@ -259,6 +260,7 @@ class _PendingWidgetState extends State<PendingWidget> {
                     onPressed: () async {
                       await _databaseServices.deleteTodo(todoId);
                       Navigator.pop(context);
+                      HomeScreen();
                     },
                     child: Text(
                       'Delete',
