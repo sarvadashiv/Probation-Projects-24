@@ -231,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (hasPendingTasks)
                                 Positioned(
                                   bottom:
-                                      MediaQuery.of(context).size.width / 45,     
+                                      4,     
                                   child: Container(
                                     width: 6,
                                     height: 6,

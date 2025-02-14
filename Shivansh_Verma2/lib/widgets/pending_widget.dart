@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:shivansh_verma2/home_screen.dart';
 import 'package:shivansh_verma2/model/todo_model.dart';
 import 'package:shivansh_verma2/services/database_services.dart';
 
@@ -14,11 +13,10 @@ class PendingWidget extends StatefulWidget {
 
 class _PendingWidgetState extends State<PendingWidget> {
   final DatabaseServices _databaseServices = DatabaseServices();
-  
+
   @override
   void initState() {
     super.initState();
-    // Ensure tasks are fetched for the current date when the widget is initialized.
     _databaseServices.getTodosForDate(widget.selectedDate);
   }
 
@@ -204,7 +202,8 @@ class _PendingWidgetState extends State<PendingWidget> {
               },
               child: Text(
                 'Cancel',
-                style: TextStyle(color: Colors.red, fontSize: screenWidth * 0.045),
+                style:
+                    TextStyle(color: Colors.red, fontSize: screenWidth * 0.045),
               ),
             ),
             ElevatedButton(
@@ -260,11 +259,11 @@ class _PendingWidgetState extends State<PendingWidget> {
                     onPressed: () async {
                       await _databaseServices.deleteTodo(todoId);
                       Navigator.pop(context);
-                      HomeScreen();
                     },
                     child: Text(
                       'Delete',
-                      style: TextStyle(color: Colors.red, fontSize: screenWidth * 0.045),
+                      style: TextStyle(
+                          color: Colors.red, fontSize: screenWidth * 0.045),
                     ),
                   ),
                   TextButton(
@@ -273,7 +272,8 @@ class _PendingWidgetState extends State<PendingWidget> {
                     },
                     child: Text(
                       'Cancel',
-                      style: TextStyle(color: Colors.white, fontSize: screenWidth * 0.045),
+                      style: TextStyle(
+                          color: Colors.white, fontSize: screenWidth * 0.045),
                     ),
                   ),
                 ],
