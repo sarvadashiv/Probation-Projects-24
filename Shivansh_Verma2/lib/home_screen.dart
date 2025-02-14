@@ -26,8 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _getFirstDayOffset(DateTime month) {
     int weekday = DateTime(month.year, month.month, 1).weekday;
-    return (weekday %
-        7);
+    return (weekday % 7);
   }
 
   int _getCalendarGridCount(DateTime month) {
@@ -165,9 +164,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       bool isDimmed = false;
 
                       if (index < offset) {
-                        int day = index - offset + 1;
-                        dayToDisplay = DateTime(
-                            _currentMonth.year, _currentMonth.month - 1, day);
+                        int prevMonthYear = _currentMonth.year;
+                        int prevMonth = _currentMonth.month - 1;
+
+                        if (prevMonth == 0) {
+                          prevMonth = 12;
+                          prevMonthYear = _currentMonth.year - 1;
+                        }
+                        int daysInPrevMonth = _getDaysInMonth(DateTime(prevMonthYear, prevMonth));
+                        int day = daysInPrevMonth - (offset - index - 1);
+                        dayToDisplay = DateTime(prevMonthYear, prevMonth, day);
                         isDimmed = true;
                       } else if (index >= offset + daysInCurrentMonth) {
                         int day = index - (offset + daysInCurrentMonth) + 1;
@@ -192,16 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {
                           setState(() {
                             _selectedDate = dayToDisplay;
-                            if (dayToDisplay.month < _currentMonth.month ||
-                                dayToDisplay.year < _currentMonth.year) {
-                              _currentMonth = DateTime(
-                                  _currentMonth.year, _currentMonth.month - 1);
-                            } else if (dayToDisplay.month >
-                                    _currentMonth.month ||
-                                dayToDisplay.year > _currentMonth.year) {
-                              _currentMonth = DateTime(
-                                  _currentMonth.year, _currentMonth.month + 1);
-                            }
+                            _currentMonth = DateTime(dayToDisplay.year, dayToDisplay.month);
                           });
                         },
                         child: Container(
