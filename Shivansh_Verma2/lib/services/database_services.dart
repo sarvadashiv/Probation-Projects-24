@@ -37,6 +37,13 @@ class DatabaseServices{
         .snapshots()
         .map(_todoListFromSnapshot);
   }
+  Stream<List<ToDo>> getAllTodos() {
+    return todoCollection
+      .where('uid', isEqualTo: user!.uid)
+      .where('createdAt', isLessThan: DateTime.now())
+      .snapshots()
+      .map(_todoListFromSnapshot);
+  }
   Stream<List<ToDo>> getCompletedTodosForDate(DateTime selectedDate) {
     return todoCollection
         .where('uid', isEqualTo: user!.uid)

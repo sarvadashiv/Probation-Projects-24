@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+//import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shivansh_verma2/model/todo_model.dart';
 import 'package:shivansh_verma2/services/database_services.dart';
+import 'package:shivansh_verma2/widgets/task_list_widget.dart';
 
 class PendingWidget extends StatefulWidget {
   const PendingWidget({Key? key, required this.selectedDate}) : super(key: key);
@@ -44,77 +45,13 @@ class _PendingWidgetState extends State<PendingWidget> {
             ),
           );
         }
-
-        List<ToDo> todos = snapshot.data!;
-        return ListView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            ToDo toDo = todos[index];
-            return Container(
-              margin: EdgeInsets.all(screenWidth * 0.035),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(screenWidth * 0.02),
-              ),
-              child: Slidable(
-                key: ValueKey(toDo.id),
-                endActionPane: ActionPane(
-                  motion: const DrawerMotion(),
-                  children: [
-                    SlidableAction(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      icon: Icons.done,
-                      label: 'Mark',
-                      onPressed: (context) {
-                        _databaseServices.updateTodoStatus(toDo.id, true);
-                      },
-                    ),
-                  ],
-                ),
-                startActionPane: ActionPane(
-                  motion: const DrawerMotion(),
-                  children: [
-                    SlidableAction(
-                      backgroundColor: Colors.amber,
-                      foregroundColor: Colors.white,
-                      icon: Icons.edit,
-                      label: 'Edit',
-                      onPressed: (context) {
-                        _showTaskDialog(context, todo: toDo);
-                      },
-                    ),
-                    SlidableAction(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: 'Delete',
-                      onPressed: (context) {
-                        _showDeleteConfirmation(context, toDo.id);
-                      },
-                    ),
-                  ],
-                ),
-                child: ListTile(
-                  title: Text(
-                    toDo.title.isEmpty ? 'No Title' : toDo.title,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: screenWidth * 0.045,
-                    ),
-                  ),
-                  subtitle: Text(
-                    toDo.description,
-                    style: TextStyle(
-                      fontSize: screenWidth * 0.04,
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
+        return TaskListWidget(
+          tasks: snapshot.data!,
+          databaseServices: _databaseServices,
+          onEditTask: (task) => _showTaskDialog(context, todo: task),
+          onDeleteTask: (taskId) => _showDeleteConfirmation(context, taskId),
+          onMarkTaskComplete: (taskId) =>
+              _databaseServices.updateTodoStatus(taskId, true),
         );
       },
     );
@@ -142,57 +79,60 @@ class _PendingWidgetState extends State<PendingWidget> {
             ),
           ),
           content: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextField(
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                    hintText: "Title",
-                    hintStyle: TextStyle(color: Colors.white10),
-                    labelText: "No Title",
-                    labelStyle: TextStyle(color: Colors.white),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _titleController,
+                    decoration: InputDecoration(
+                      hintText: "Title",
+                      hintStyle: TextStyle(color: Colors.white10),
+                      labelText: "No Title",
+                      labelStyle: TextStyle(color: Colors.white),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.04,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
+                    maxLines: null,
                   ),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: screenWidth * 0.04,
-                  ),
-                  maxLines: null,
-                ),
-                SizedBox(height: screenWidth * 0.04),
-                TextField(
-                  controller: _descriptionController,
-                  decoration: InputDecoration(
-                    hintText: "Description",
-                    hintStyle: TextStyle(color: Colors.white10),
-                    labelText: "No Description",
-                    labelStyle: TextStyle(color: Colors.white),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                  SizedBox(height: screenWidth * 0.04),
+                  TextField(
+                    controller: _descriptionController,
+                    decoration: InputDecoration(
+                      hintText: "Description",
+                      hintStyle: TextStyle(color: Colors.white10),
+                      labelText: "No Description",
+                      labelStyle: TextStyle(color: Colors.white),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: screenWidth * 0.04,
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
+                    minLines: 1,
+                    maxLines: null,
                   ),
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: screenWidth * 0.04,
-                  ),
-                  minLines: 1,
-                  maxLines: null,
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           actions: [
